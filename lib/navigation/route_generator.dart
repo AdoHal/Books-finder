@@ -2,6 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:it_books/models/book.dart';
+import 'package:it_books/models/book_list_args.dart';
 import 'package:it_books/navigation/routes.dart';
 import 'package:it_books/screens/book_list_screen.dart';
 import 'package:it_books/screens/book_screen.dart';
@@ -15,21 +16,22 @@ class RouteGenerator{
         return MaterialPageRoute(builder: (_) => const SearchScreen());
 
       case Routes.bookScreen:
-        if(settings.arguments != null){
+        if(settings.arguments != null && settings.arguments is Book){
           Book book = settings.arguments as Book;
           return MaterialPageRoute(builder: (_) => BookScreen(book: book));
         } else {
-          return MaterialPageRoute(builder: (_) => const BookScreen());
+          return _errorRoute();
         }
       case Routes.bookListScreen:
-        if(settings.arguments != null) {
-          List<dynamic> books = settings.arguments as List<dynamic>;
+        if(settings.arguments != null && settings.arguments is BookListScreenArguments) {
+          BookListScreenArguments args= settings.arguments as BookListScreenArguments;
           return MaterialPageRoute(
-              builder: (_) => BookListScreen(books: books));
+              builder: (_) => BookListScreen(term: args.term, books: args.books, numOfBooks: args.numOfBooks,));
         }else{
-          return MaterialPageRoute(
-              builder: (_) => BookListScreen());
+          return _errorRoute();
         }
+
+
 
       default:
         return _errorRoute();
@@ -43,7 +45,7 @@ class RouteGenerator{
           title: const Text('Error'),
         ),
         body: const Center(
-          child: Text('ERROR'),
+          child: Text('Something went wrong'),
         ),
       );
     });
