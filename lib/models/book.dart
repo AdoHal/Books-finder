@@ -15,6 +15,8 @@ class Book {
   late String imageUrl;
   late String bookUrl;
 
+  Book();
+
   Book.fromJson(Map<String, dynamic> json) :
       title = json["title"],
         subtitle = json["subtitle"],
